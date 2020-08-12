@@ -6,7 +6,8 @@
 
 var app = require('../app')
 var debug = require('debug')('website-backend:server')
-var http = require('http')
+var https = require('https')
+var fs = require('fs')
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +20,12 @@ app.set('port', port)
  * Create HTTP server.
  */
 
-var server = http.createServer(app)
+var ssl = {
+    key: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/fullchain.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/chain.pem')
+}
+var server = https.createServer(ssl,app)
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -9,6 +9,9 @@ var mongoSetup = require('./mongo/mongo-setup')
 
 var app = express()
 
+app.set('trust proxy', true)
+app.set('trust proxy', 'loopback')
+
 app.use(cors())
 app.use(logger('dev'))
 app.use(express.json())
