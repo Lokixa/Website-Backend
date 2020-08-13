@@ -7,6 +7,7 @@
 var app = require('../app')
 var debug = require('debug')('website-backend:server')
 var https = require('https')
+var http = require('http')
 var fs = require('fs')
 
 /**
@@ -20,12 +21,20 @@ app.set('port', port)
  * Create HTTP server.
  */
 
-var ssl = {
-    key: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/fullchain.pem'),
-    ca: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/chain.pem')
+var server
+try {
+	var ssl = {
+		key: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/privkey.pem'),
+		cert: fs.readFileSync(
+			'/etc/letsencrypt/live/lyubenk.com/fullchain.pem'
+		),
+		ca: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/chain.pem'),
+	}
+	server = https.createServer(ssl, app)
+} catch (err) {
+	console.log('No https certificate, switching to http...')
+	server = http.createServer(app)
 }
-var server = https.createServer(ssl,app)
 
 /**
  * Listen on provided port, on all network interfaces.
