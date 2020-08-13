@@ -1,0 +1,4 @@
+{
+	"AllowedOrigin": "https://lyubenk.com",
+	"MongoInstance": "mongodb://localhost/web"
+}
