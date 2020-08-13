@@ -21,26 +21,13 @@ app.set('port', port)
  * Create HTTP server.
  */
 
-var server
-try {
-	var ssl = {
-		key: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/privkey.pem'),
-		cert: fs.readFileSync(
-			'/etc/letsencrypt/live/lyubenk.com/fullchain.pem'
-		),
-		ca: fs.readFileSync('/etc/letsencrypt/live/lyubenk.com/chain.pem'),
-	}
-	server = https.createServer(ssl, app)
-} catch (err) {
-	console.log('No https certificate, switching to http...')
-	server = http.createServer(app)
-}
+var server = http.createServer(app)
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port)
+server.listen(port,'127.0.0.1')
 server.on('error', onError)
 server.on('listening', onListening)
 
