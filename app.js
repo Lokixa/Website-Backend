@@ -9,7 +9,7 @@ var projectsRouter = require('./routes/projects')
 var mongoSetup = require('./mongo/mongo-setup')
 
 var app = express()
-const allowedOrigin = 'http://127.0.0.1:3000'
+const allowedOrigin = 'https://lyubenk.com'
 
 app.set('trust proxy', true)
 app.set('trust proxy', 'loopback')
