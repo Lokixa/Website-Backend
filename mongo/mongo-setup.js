@@ -1,7 +1,8 @@
+const config = require('../config.json')
 function mongoSetup() {
 	const mongoose = require('mongoose')
 
-	mongoose.connect('mongodb://localhost/web', {
+	mongoose.connect(config.MongoInstance, {
 		useUnifiedTopology: true,
 		useNewUrlParser: true,
 	})

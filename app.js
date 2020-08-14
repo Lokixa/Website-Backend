@@ -7,12 +7,13 @@ var expressSanitizer = require('express-sanitizer')
 
 var projectsRouter = require('./routes/projects')
 var mongoSetup = require('./mongo/mongo-setup')
+const config = require('./config.json')
 
 var app = express()
 
-app.set('trust proxy', 'loopback')
+const allowedOrigin = config.AllowedOrigin
 
-const allowedOrigin = "https://lyubenk.com"
+app.set('trust proxy', 'loopback')
 
 app.use(cors({origin:allowedOrigin}))
 app.use(helmet())
