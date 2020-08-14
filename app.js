@@ -28,14 +28,13 @@ mongoSetup()
 // Only accept requests from the allowedOrigin
 app.use(function (req,res,next) {
 	const origin = req.headers['origin'] || null
-	console.log(origin)
+	console.log(req.headers['x-forwarded-for'])
 	if(!origin){
 		throw new Error("No Origin")
 	}
 	else if(origin !== allowedOrigin){
 		throw new Error("Invalid Origin")
 	}
-	console.log(req.headers)
 
 	next()
 })
