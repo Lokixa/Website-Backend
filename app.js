@@ -9,12 +9,12 @@ var projectsRouter = require('./routes/projects')
 var mongoSetup = require('./mongo/mongo-setup')
 
 var app = express()
-const allowedOrigin = 'https://lyubenk.com'
 
-app.set('trust proxy', true)
 app.set('trust proxy', 'loopback')
 
-app.use(cors({ origin: allowedOrigin }))
+const allowedOrigin = "https://lyubenk.com"
+
+app.use(cors({origin:allowedOrigin}))
 app.use(helmet())
 app.use(expressSanitizer())
 app.use(logger('dev'))
@@ -23,13 +23,24 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 mongoSetup()
+
+// Only accept requests from the allowedOrigin
+app.use(function (req,res,next) {
+	const origin = req.headers['origin'] || null
+	console.log(origin)
+	if(!origin){
+		throw new Error("No Origin")
+	}
+	else if(origin !== allowedOrigin){
+		throw new Error("Invalid Origin")
+	}
+	console.log(req.headers)
+
+	next()
+})
 app.use('/projects', projectsRouter)
 app.use((err, req, res, next) => {
-	if (err) {
-		console.error(err)
-		next(err)
-	}
-	next()
+	res.status(400).json(err.message)
 })
 
 module.exports = app
