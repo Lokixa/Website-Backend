@@ -16,13 +16,13 @@ envService.loadDotenv()
 
 app.set('trust proxy', 'loopback')
 
+app.use(cors({ origin: process.env['ALLOWED_ORIGIN'] }))
+app.use(helmet())
+app.use(logger('dev'))
 // JWT
 app.use(trySetJWTHeader, checkForJWTHeader)
 
-app.use(cors({ origin: process.env['ALLOWED_ORIGIN'] }))
-app.use(helmet())
 app.use(expressSanitizer())
-app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 

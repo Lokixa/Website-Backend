@@ -1,8 +1,16 @@
-const parsed = require('dotenv').config()
+const dotenv = require('dotenv')
+const path = require('path')
 
 const loadDotenv = () => {
-	for (let key in parsed) {
-		process.env[key] = parsed[key]
+	switch (process.env.NODE_ENV) {
+		case 'dev':
+			console.log('Loaded dev env')
+			dotenv.config({ path: path.join(__dirname, '../.env.dev') })
+			break
+		default:
+			dotenv.config({ path: path.join(__dirname, '../.env') })
+			console.log('Loaded env')
+			break
 	}
 }
 
