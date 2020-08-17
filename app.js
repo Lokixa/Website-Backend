@@ -4,18 +4,18 @@ var logger = require('morgan')
 var cors = require('cors')
 var helmet = require('helmet')
 var expressSanitizer = require('express-sanitizer')
+var envService = require('./services/envService')
 
 var projectsRouter = require('./routes/projects')
 var mongoSetup = require('./mongo/mongo-setup')
-const config = require('./config.json')
 
 var app = express()
-const allowedOrigin = config.AllowedOrigin
+envService.loadDotenv()
 
 app.set('trust proxy', true)
 app.set('trust proxy', 'loopback')
 
-app.use(cors({ origin: allowedOrigin }))
+app.use(cors({ origin: process.env['ALLOWED_ORIGIN'] }))
 app.use(helmet())
 app.use(expressSanitizer())
 app.use(logger('dev'))
