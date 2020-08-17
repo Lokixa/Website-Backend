@@ -19,6 +19,10 @@ app.set('trust proxy', 'loopback')
 app.use(cors({ origin: process.env['ALLOWED_ORIGIN'] }))
 app.use(helmet())
 app.use(logger('dev'))
+app.use((req, res, next) => {
+	console.log(req.headers['x-forwarded-for'], req.headers['x-proxy-host'])
+	next()
+})
 // JWT
 app.use(trySetJWTHeader, checkForJWTHeader)
 
