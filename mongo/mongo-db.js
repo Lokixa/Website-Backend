@@ -16,4 +16,6 @@ const projectSchema = new mongoose.Schema({
 	description: String,
 	license: String,
 })
-module.exports = mongoose.connection.model('projects', projectSchema)
+module.exports = {
+	Project: mongoose.connection.model('projects', projectSchema),
+}

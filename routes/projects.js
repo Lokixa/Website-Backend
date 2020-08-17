@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-const db = require('../mongo/mongo-db')
+const { Project } = require('../mongo/mongo-db')
 const { body, param, validationResult } = require('express-validator')
 
 const bodyChecks = {
@@ -10,15 +10,18 @@ const bodyChecks = {
 	description: body('description').isLength({ min: 3, max: 150 }),
 	license: body('license').isLength({ min: 1, max: 10 }),
 }
+
 router.get('/', async function (req, res) {
-	const docs = await db.find({})
+	const docs = await Project.find({})
 	res.json(docs)
 })
 router.get(
 	'/:name',
 	param('name').isLength({ min: 3, max: 20 }),
 	async (req, res) => {
-		const doc = await db.find({ name: req.sanitize(req.params.name) })
+		const doc = await Project.find({
+			name: req.sanitize(req.params.name),
+		})
 		res.json(doc)
 	}
 )
@@ -37,7 +40,7 @@ router.post(
 			res.status(400).json({ errors: errors.array() })
 			return
 		}
-		const doc = await db.create(req.body)
+		const doc = await Project.create(req.body)
 		res.json(doc)
 	}
 )
@@ -58,7 +61,7 @@ router.put(
 			return
 		}
 
-		const doc = await db.updateOne(
+		const doc = await Project.updateOne(
 			{ name: req.sanitize(req.params.name) },
 			req.body
 		)
@@ -74,7 +77,9 @@ router.delete(
 			res.status(400).json({ errors: errors.array() })
 			return
 		}
-		const doc = await db.deleteOne({ name: req.sanitize(req.params.name) })
+		const doc = await Project.deleteOne({
+			name: req.sanitize(req.params.name),
+		})
 		res.json(doc)
 	}
 )
